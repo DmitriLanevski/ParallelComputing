@@ -6,75 +6,70 @@ import java.util.LinkedHashMap;
  */
 public class InputOutputBundle {
     private BigInteger sumOfAllNumbers = BigInteger.valueOf(0);
-    private BigInteger maxOfAllNumbers = BigInteger.valueOf(-2147483648);
-    private BigInteger minOfAllNumbers = BigInteger.valueOf(2147483647);
+    private BigInteger maxOfAllNumbers = null;
+    private BigInteger minOfAllNumbers = null;
     private LinkedHashMap<String, BigInteger> maxSumFile = new LinkedHashMap<>();
     private LinkedHashMap<String, BigInteger> minSumFile = new LinkedHashMap<>();
 
-    private Object monitor1 = new Object();
-    private Object monitor2 = new Object();
-    private Object monitor3 = new Object();
-    private Object monitor4 = new Object();
-    private Object monitor5 = new Object();
-
+    private Object IOBmonitor1 = new Object();
 
     public BigInteger getSumOfAllNumbers() {
-        return sumOfAllNumbers;
+        synchronized (IOBmonitor1){
+            return sumOfAllNumbers;
+        }
     }
 
     public BigInteger getMaxOfAllNumbers() {
-        return maxOfAllNumbers;
+        synchronized (IOBmonitor1){
+            return maxOfAllNumbers;
+        }
     }
 
     public BigInteger getMinOfAllNumbers() {
-        return minOfAllNumbers;
+        synchronized (IOBmonitor1){
+            return minOfAllNumbers;
+        }
     }
 
     public LinkedHashMap<String, BigInteger> getMaxSumFile() {
-        return maxSumFile;
+        synchronized (IOBmonitor1){
+            return maxSumFile;
+        }
     }
 
     public LinkedHashMap<String, BigInteger> getMinSumFile() {
-        return minSumFile;
+        synchronized (IOBmonitor1){
+            return minSumFile;
+        }
     }
 
     public void setSumOfAllNumbers(BigInteger sumOfAllNumbers) {
-        this.sumOfAllNumbers = sumOfAllNumbers;
+        synchronized (IOBmonitor1){
+            this.sumOfAllNumbers = sumOfAllNumbers;
+        }
     }
 
     public void setMaxOfAllNumbers(BigInteger maxOfAllNumbers) {
-        this.maxOfAllNumbers = maxOfAllNumbers;
+        synchronized (IOBmonitor1){
+            this.maxOfAllNumbers = maxOfAllNumbers;
+        }
     }
 
     public void setMinOfAllNumbers(BigInteger minOfAllNumbers) {
-        this.minOfAllNumbers = minOfAllNumbers;
+        synchronized (IOBmonitor1){
+            this.minOfAllNumbers = minOfAllNumbers;
+        }
     }
 
     public void setMaxSumFile(LinkedHashMap<String, BigInteger> msxSumFile) {
-        this.maxSumFile = msxSumFile;
+        synchronized (IOBmonitor1){
+            this.maxSumFile = msxSumFile;
+        }
     }
 
     public void setMinSumFile(LinkedHashMap<String, BigInteger> minSumFile) {
-        this.minSumFile = minSumFile;
-    }
-
-    public Object getMonitor1() {
-        return monitor1;
-    }
-
-    public Object getMonitor2() {
-        return monitor2;
-    }
-
-    public Object getMonitor3() {
-        return monitor3;
-    }
-
-    public Object getMonitor4() {
-        return monitor4;
-    }
-
-    public Object getMonitor5() {
-        return monitor5;
+        synchronized (IOBmonitor1){
+            this.minSumFile = minSumFile;
+        }
     }
 }

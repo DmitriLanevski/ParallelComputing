@@ -22,53 +22,74 @@ public class ParallelComputing implements Runnable{
     public void run() {
         try (Scanner sc = new Scanner(file, "UTF-8")){
             BigInteger sumOfFileNumbers = BigInteger.valueOf(0);
+            BigInteger maxOfAllFileNumbers = null;
+            BigInteger minOfAllFileNumbers = null;
+            String key;
+            BigInteger value;
+
             while(sc.hasNextLine()){
                 String[] lineComponents = sc.nextLine().split(" ");
                 for (String component: lineComponents) {
                     try {
                         BigInteger nextNumber = new BigInteger(component);
-                        synchronized (IOB.getMonitor1()){
-                            IOB.setSumOfAllNumbers(IOB.getSumOfAllNumbers().add(nextNumber));
-                        }
-                        synchronized (IOB.getMonitor2()) {
-                            if (IOB.getMaxOfAllNumbers().compareTo(nextNumber) == -1){
-                                IOB.setMaxOfAllNumbers(nextNumber);
-                            }
-                        }
-                        synchronized (IOB.getMonitor3()) {
-                            if (IOB.getMinOfAllNumbers().compareTo(nextNumber) == 1){
-                                IOB.setMinOfAllNumbers(nextNumber);
-                            }
-                        }
                         sumOfFileNumbers = sumOfFileNumbers.add(nextNumber);
+                        if (maxOfAllFileNumbers == null){
+                            maxOfAllFileNumbers = nextNumber;
+                        }
+                        else if (maxOfAllFileNumbers.compareTo(nextNumber) == -1){
+                            maxOfAllFileNumbers = nextNumber;
+                        }
+                        if (minOfAllFileNumbers == null){
+                            minOfAllFileNumbers = nextNumber;
+                        }
+                        else if (minOfAllFileNumbers.compareTo(nextNumber) == 1){
+                            minOfAllFileNumbers = nextNumber;
+                        }
                     } catch (NumberFormatException e) {
                         //throw new StringToBigIntegerConversionException(component, file, e);
                         System.out.println("Unconvertable element " + component + " in file " + file.getName() + ".");
                     }
                 }
             }
-            synchronized (IOB.getMonitor4()) {
-                if (IOB.getMaxSumFile().isEmpty()){
-                    IOB.getMaxSumFile().put(file.getName(), sumOfFileNumbers);
-                }
-                String key = (new ArrayList<String>(IOB.getMaxSumFile().keySet())).get(0);
-                BigInteger value = (new ArrayList<BigInteger>(IOB.getMaxSumFile().values())).get(0);
+
+            IOB.setSumOfAllNumbers(IOB.getSumOfAllNumbers().add(sumOfFileNumbers));
+            if (IOB.getMaxOfAllNumbers() == null){
+                IOB.setMaxOfAllNumbers(maxOfAllFileNumbers);
+            }
+            else if (IOB.getMaxOfAllNumbers().compareTo(maxOfAllFileNumbers) == -1){
+                IOB.setMaxOfAllNumbers(maxOfAllFileNumbers);
+            }
+            if (IOB.getMinOfAllNumbers() == null){
+                IOB.setMinOfAllNumbers(minOfAllFileNumbers);
+            }
+            else if (IOB.getMinOfAllNumbers().compareTo(minOfAllFileNumbers) == 1){
+                IOB.setMinOfAllNumbers(minOfAllFileNumbers);
+            }
+
+            if (IOB.getMaxSumFile().isEmpty()){
+                IOB.getMaxSumFile().put(file.getName(), sumOfFileNumbers);
+            }
+            else {
+                key = (new ArrayList<String>(IOB.getMaxSumFile().keySet())).get(0);
+                value = (new ArrayList<BigInteger>(IOB.getMaxSumFile().values())).get(0);
                 if (value.compareTo(sumOfFileNumbers) == -1){
                     IOB.getMaxSumFile().remove(key);
                     IOB.getMaxSumFile().put(file.getName(), sumOfFileNumbers);
                 }
             }
-            synchronized (IOB.getMonitor5()) {
-                if (IOB.getMinSumFile().isEmpty()){
-                    IOB.getMinSumFile().put(file.getName(), sumOfFileNumbers);
-                }
-                String key = (new ArrayList<String>(IOB.getMinSumFile().keySet())).get(0);
-                BigInteger value = (new ArrayList<BigInteger>(IOB.getMinSumFile().values())).get(0);
+
+            if (IOB.getMinSumFile().isEmpty()){
+                IOB.getMinSumFile().put(file.getName(), sumOfFileNumbers);
+            }
+            else {
+                key = (new ArrayList<String>(IOB.getMinSumFile().keySet())).get(0);
+                value = (new ArrayList<BigInteger>(IOB.getMinSumFile().values())).get(0);
                 if (value.compareTo(sumOfFileNumbers) == 1){
                     IOB.getMinSumFile().remove(key);
                     IOB.getMinSumFile().put(file.getName(), sumOfFileNumbers);
                 }
             }
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
