@@ -53,8 +53,8 @@ public class ParallelComputing implements Runnable{
             IOB.increaseSumOfAllNumbers(sumOfFileNumbers);
             IOB.compareAndChangeMaxOfAllNumbers(maxOfAllFileNumbers);
             IOB.compareAndChangeMinOfAllNumbers(minOfAllFileNumbers);
-            IOB.compareAndChangeMaxSumFile(file.getName(), maxOfAllFileNumbers);
-            IOB.compareAndChangeMinSumFile(file.getName(), minOfAllFileNumbers);
+            IOB.compareAndChangeMaxSumFile(file.getName(), sumOfFileNumbers);
+            IOB.compareAndChangeMinSumFile(file.getName(), sumOfFileNumbers);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

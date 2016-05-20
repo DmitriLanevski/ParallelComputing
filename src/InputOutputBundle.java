@@ -96,7 +96,7 @@ public class InputOutputBundle {
             else {
                 String key = (new ArrayList<String>(this.minSumFile.keySet())).get(0);
                 BigInteger value = (new ArrayList<BigInteger>((this.minSumFile.values())).get(0));
-                if (value.compareTo(minOfAllFileNumbers) == -1){
+                if (value.compareTo(minOfAllFileNumbers) == 1){
                     this.minSumFile.remove(key);
                     this.minSumFile.put(fileName, minOfAllFileNumbers);
                 }
