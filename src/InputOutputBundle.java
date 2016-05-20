@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -41,6 +42,67 @@ public class InputOutputBundle {
         synchronized (IOBmonitor1){
             return minSumFile;
         }
+    }
+
+    public void increaseSumOfAllNumbers(BigInteger sumOfAllNumbers) {
+        synchronized (IOBmonitor1){
+                this.sumOfAllNumbers = this.sumOfAllNumbers.add(sumOfAllNumbers);
+        }
+    }
+
+    public void compareAndChangeMaxOfAllNumbers(BigInteger maxOfNumbers){
+        synchronized (IOBmonitor1){
+            if (this.maxOfAllNumbers == null){
+                this.maxOfAllNumbers = maxOfNumbers;
+            }
+            else if ((this.maxOfAllNumbers.compareTo(maxOfNumbers) == -1)){
+                this.maxOfAllNumbers = maxOfNumbers;
+            }
+        }
+    }
+
+    public void compareAndChangeMinOfAllNumbers(BigInteger maxOfNumbers){
+        synchronized (IOBmonitor1){
+            if (this.minOfAllNumbers == null){
+                this.minOfAllNumbers = maxOfNumbers;
+            }
+            else if ((this.minOfAllNumbers.compareTo(maxOfNumbers) == 1)){
+                this.minOfAllNumbers = maxOfNumbers;
+            }
+        }
+    }
+
+    public void compareAndChangeMaxSumFile(String fileName, BigInteger maxOfAllFileNumbers){
+        synchronized (IOBmonitor1){
+            if (this.maxSumFile.isEmpty()){
+                this.maxSumFile.put(fileName, maxOfAllFileNumbers);
+            }
+            else {
+                String key = (new ArrayList<String>(this.maxSumFile.keySet())).get(0);
+                BigInteger value = (new ArrayList<BigInteger>((this.maxSumFile.values())).get(0));
+                if (value.compareTo(maxOfAllFileNumbers) == -1){
+                    this.maxSumFile.remove(key);
+                    this.maxSumFile.put(fileName, maxOfAllFileNumbers);
+                }
+            }
+        }
+    }
+
+    public void compareAndChangeMinSumFile(String fileName, BigInteger minOfAllFileNumbers){
+        synchronized (IOBmonitor1){
+            if (this.minSumFile.isEmpty()){
+                this.minSumFile.put(fileName, minOfAllFileNumbers);
+            }
+            else {
+                String key = (new ArrayList<String>(this.minSumFile.keySet())).get(0);
+                BigInteger value = (new ArrayList<BigInteger>((this.minSumFile.values())).get(0));
+                if (value.compareTo(minOfAllFileNumbers) == -1){
+                    this.minSumFile.remove(key);
+                    this.minSumFile.put(fileName, minOfAllFileNumbers);
+                }
+            }
+        }
+
     }
 
     public void setSumOfAllNumbers(BigInteger sumOfAllNumbers) {

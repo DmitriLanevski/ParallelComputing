@@ -24,8 +24,6 @@ public class ParallelComputing implements Runnable{
             BigInteger sumOfFileNumbers = BigInteger.valueOf(0);
             BigInteger maxOfAllFileNumbers = null;
             BigInteger minOfAllFileNumbers = null;
-            String key;
-            BigInteger value;
 
             while(sc.hasNextLine()){
                 String[] lineComponents = sc.nextLine().split(" ");
@@ -52,43 +50,11 @@ public class ParallelComputing implements Runnable{
                 }
             }
 
-            IOB.setSumOfAllNumbers(IOB.getSumOfAllNumbers().add(sumOfFileNumbers));
-            if (IOB.getMaxOfAllNumbers() == null){
-                IOB.setMaxOfAllNumbers(maxOfAllFileNumbers);
-            }
-            else if (IOB.getMaxOfAllNumbers().compareTo(maxOfAllFileNumbers) == -1){
-                IOB.setMaxOfAllNumbers(maxOfAllFileNumbers);
-            }
-            if (IOB.getMinOfAllNumbers() == null){
-                IOB.setMinOfAllNumbers(minOfAllFileNumbers);
-            }
-            else if (IOB.getMinOfAllNumbers().compareTo(minOfAllFileNumbers) == 1){
-                IOB.setMinOfAllNumbers(minOfAllFileNumbers);
-            }
-
-            if (IOB.getMaxSumFile().isEmpty()){
-                IOB.getMaxSumFile().put(file.getName(), sumOfFileNumbers);
-            }
-            else {
-                key = (new ArrayList<String>(IOB.getMaxSumFile().keySet())).get(0);
-                value = (new ArrayList<BigInteger>(IOB.getMaxSumFile().values())).get(0);
-                if (value.compareTo(sumOfFileNumbers) == -1){
-                    IOB.getMaxSumFile().remove(key);
-                    IOB.getMaxSumFile().put(file.getName(), sumOfFileNumbers);
-                }
-            }
-
-            if (IOB.getMinSumFile().isEmpty()){
-                IOB.getMinSumFile().put(file.getName(), sumOfFileNumbers);
-            }
-            else {
-                key = (new ArrayList<String>(IOB.getMinSumFile().keySet())).get(0);
-                value = (new ArrayList<BigInteger>(IOB.getMinSumFile().values())).get(0);
-                if (value.compareTo(sumOfFileNumbers) == 1){
-                    IOB.getMinSumFile().remove(key);
-                    IOB.getMinSumFile().put(file.getName(), sumOfFileNumbers);
-                }
-            }
+            IOB.increaseSumOfAllNumbers(sumOfFileNumbers);
+            IOB.compareAndChangeMaxOfAllNumbers(maxOfAllFileNumbers);
+            IOB.compareAndChangeMinOfAllNumbers(minOfAllFileNumbers);
+            IOB.compareAndChangeMaxSumFile(file.getName(), maxOfAllFileNumbers);
+            IOB.compareAndChangeMinSumFile(file.getName(), minOfAllFileNumbers);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
